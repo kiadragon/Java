@@ -1,0 +1,61 @@
+﻿Set 1
+1.  Does the bug always move to a new location? Explain. 
+2.  In which direction does the bug move? 
+3.  What does the bug do if it does not move? 
+4.  What does a bug leave behind when it moves? 
+5.  What happens when the bug is at an edge of the grid? (Consider whether the bug
+    is facing the edge as well as whether the bug is facing some other direction when
+    answering this question.)
+6.  What happens when a bug has a rock in the location immediately in front of it? 
+7.  Does a flower move? 
+8.  What behavior does a flower have? 
+9.  Does a rock move or have any other behavior? 
+10.  Can more than one actor (bug, flower, rock) be in the same location in the grid at
+the same time?
+
+1. NO, it does not. From what I see the bugs I create all face north.
+2.North.
+3. It stops and changes direction.
+4. A flower on each step.
+5. It changes direction clockwise when facing the edge .It moves on when facing no edge.
+6. It changes direction it goes immediately.
+7. No ,it does not.
+8. It will fade and wither.
+9. No, it does not.
+10. No, it cant. 
+
+
+1. Test the setDirection method with the following inputs and complete the table, giving the compass direction each input represents.
+
+
+Degrees
+Compass Direction
+0
+North
+45
+North-East
+90
+East
+135
+South-East
+180
+South
+225
+South-West
+270
+West
+315
+North-West
+360
+North
+
+
+2. Move a bug to a different location using the moveTo method. In which directions can you move it? How far can you move it? What happens if you try to move the bug outside the grid?
+3. Change the color of a bug, a flower, and a rock. Which method did you use?
+4. Move a rock on top of a bug and then move the rock again. What happened to the bug?
+
+2. The bug can be moved in all directions and moved as far as inside the gridworld. It will give you an Illegal Argument Exception and bug will not move.
+
+4. setColor()
+
+5. It was killed and disappeared.

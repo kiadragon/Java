@@ -1,0 +1,147 @@
+﻿Set 7
+
+The source code for the Critter class is in the critters directory
+
+1. What methods are implemented in Critter?
+Answer: 
+act()
+getActors()
+processActors(ArrayList<Actor> actors)
+getMoveLocations()
+selectMoveLocation(ArrayList<Location> locs)
+makeMove(Location loc)
+
+2. What are the five basic actions common to all critters when they act?
+Answer: 
+getActors()
+processActors(ArrayList<Actor> actors)
+getMoveLocations()
+selectMoveLocation(ArrayList<Location> locs)
+makeMove(Location loc)
+
+3. Should subclasses of Critter override the getActors method? Explain.
+Answer: 
+If the critter choose different ways than other critters do, then yes.
+Else no.
+
+4. Describe the way that a critter could process actors.
+Answer: 
+It eats all things around it except rock and critter.
+
+5. What three methods must be invoked to make a critter move? Explain each of these methods.
+Answer: 
+getMoveLocations()
+selectMoveLocation(ArrayList<Location> locs)
+makeMove(Location loc)
+As the meaning of the public function, critter need get the location(where it can go) first. Then it need to choose a location(selectMoveLocation()). Lastly the critter need to take a move(makeMove()).
+
+6. Why is there no Critter constructor?
+Answer:
+In actor, there is a constructor and java will call it by default.
+And it is also needed to be extend for other explicit critter class.
+
+Set 8
+ 
+The source code for the ChameleonCritter class is in the critters directory
+ 
+1. Why does act cause a ChameleonCritter to act differently from a Critter even though ChameleonCritter does not override act?
+Answer:
+Because the method act it calls is different. Other methods were overrided. So the act is different.
+
+2. Why does the makeMove method of ChameleonCritter call super.makeMove?
+Anwser:
+Because first it changes its direction to face the next place.Then it call suuper makeMove() to call the initial method from critter class. Super call original object.
+
+
+
+3. How would you make the ChameleonCritter drop flowers in its old location when it moves?
+Answer:
+I would simply add a few line code:
+    public void makeMove(Location loc)
+    {
+        Location pastloc = getLocation();  // add
+        setDirection(getLocation().getDirectionToward(loc));
+        super.makeMove(loc);
+        if ( pastloc != loc ){  // add
+            Flower flower = new Flower(getColor());  // add
+            flower.putSelfInGrid(getGrid(), pastloc);  //add
+            // protecting for replacement            
+        }
+    }
+}
+
+
+4. Why doesn't ChameleonCritter override the getActors method?
+Answer:
+Because it does not need a new method to get a new way to deal with it. What it in critter is satisfy the need.
+
+5. Which class contains the getLocation method?
+Answer:
+Actor.
+
+6. How can a Critter access its own grid?
+Answer:
+By calling getGrid() method return a Grid object.
+
+
+Set 9
+
+The source code for the CrabCritter class is reproduced at the end of this part of GridWorld.
+
+1. Why doesn't CrabCritter override the processActors method?
+Answer:
+Because a CrabCritter 'eats' things in front, to the right-front, to the left-front. It has the same behavior as the critters do. No need to override it.
+
+
+2. Describe the process a CrabCritter uses to find and eat other actors. Does it always eat all neighboring actors? Explain.
+Answer:
+It gets its front, right-front and left-front actor by using a getActor()(but there is a new function called getLocationsInDirections().It can be passed direction array to return a Location ArrayList.), then call removeSelfFromGrid() in processActors().
+
+3. Why is the getLocationsInDirections method used in CrabCritter?
+Answer: 
+It can be passed direction array to return a Location ArrayList for processActors().
+4. If a CrabCritter has location (3, 4) and faces south, what are the possible locations for actors that are returned by a call to the getActors method?
+Answer:
+Location(4, 3)
+Location(4, 4)
+Location(4, 5)
+
+5. What are the similarities and differences between the movements of a CrabCritter and a Critter?
+Answer:
+Similarities: They both remove subjects.They both choose their ways randomly and will not rurn in the direction they are moving.
+Differences: 	CrabCritter will turn left or right, while Critter would not turn when it was trapped. CrabCritter will only move to its right or left, while critter will move to any neighboring location.
+
+
+6. How does a CrabCritter determine when it turns instead of moving?
+Answer:
+It judges in makeMove(), if loc == getMoveLocations(), then turns randomly.
+
+7. Why don't the CrabCritter objects eat each other?
+Answer:
+From code:
+    public void processActors(ArrayList<Actor> actors)
+    {
+        for (Actor a : actors)
+        {
+            if (!(a instanceof Rock) && !(a instanceof Critter))
+                a.removeSelfFromGrid();
+        }
+    }
+
+And it is still a critter method, make sure CrabCritter does not eat each other.
+
+
+Exercises
+1. Modify the processActors method in ChameleonCritter so that if the list of actors to process is empty, the color of the ChameleonCritter will darken (like a flower).
+
+In the following exercises, your first step should be to decide which of the five methods--getActors, processActors, getMoveLocations, selectMoveLocation, and makeMove-- should be changed to get the desired result.
+
+2. Create a class called ChameleonKid that extends ChameleonCritter as modified in exercise 1. A ChameleonKid changes its color to the color of one of the actors immediately in front or behind. If there is no actor in either of these locations, then the ChameleonKid darkens like the modified ChameleonCritter.
+
+3. Create a class called RockHound that extends Critter. A RockHound gets the actors to be processed in the same way as a Critter. It removes any rocks in that list from the grid. A RockHound moves like a Critter.
+
+4. Create a class BlusterCritter that extends Critter. A BlusterCritter looks at all of the neighbors within two steps of its current location. (For a BlusterCritter not near an edge, this includes 24 locations). It counts the number of critters in those locations. If there are fewer than c critters, the BlusterCritter's color gets brighter (color values increase). If there are c or more critters, the BlusterCritter's color darkens (color values decrease). Here, c is a value that indicates the courage of the critter. It should be set in the constructor.
+
+5. Create a class QuickCrab that extends CrabCritter. A QuickCrab processes actors the same way a CrabCritter does. A QuickCrab moves to one of the two locations, randomly selected, that are two spaces to its right or left, if that location and the intervening(介于中间的) location are both empty. Otherwise, a QuickCrab moves like a CrabCritter.
+
+6. Create a class KingCrab that extends CrabCritter. A KingCrab gets the actors to be processed in the same way a CrabCritter does. A KingCrab causes each actor that it processes to move one location further away from the KingCrab. If the actor cannot move away, the KingCrab removes it from the grid. When the KingCrab has completed processing the actors, it moves like a CrabCritter.

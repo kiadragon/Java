@@ -1,0 +1,204 @@
+﻿自学报告
+
+
+12330283 SUXIAOHANG
+
+VIM
+  
+
+  VIM 我所知道是作为主流的程序员编辑器。很多大牛们是vim控。
+  且vim的上下左右控制键是hjkl。还有它的复制粘贴系统控制板。有三种模式：
+
+	插入模式 
+	命令模式 
+	底行模式
+
+
+
+  确实vim是不需要鼠标可以做到鼠标在传统的editor能够做到事情。
+  但是vim的学习曲线相当陡峭，一般来说需要时间来学习。
+  我还是会好好学习vim，记好常用快捷键。
+	
+图片来自网络
+  
+	最后说一句，我是emacs党。
+
+
+
+
+
+
+JAVA
+配置
+  原来数据库大作业的时候JAVA环境配置过一次，后来重装了还是知道怎么配置环境的。所以java配置环境没什么好讲的了，百度谷歌就好。
+
+
+语言学习
+  Java是真正意义上面向对象的语言。程序不像C/C++那样有个main函数入口，真正的主入口是在一个类内:
+public class Test
+{
+    public static void main(String[] args)
+    {
+    }
+}
+  如同这个样子。有点像C++一个类但是这个类包含着主函数，并且this隐含指针无处不在。
+
+  对比C/C++
+	JAVA 有很多优点。
+		1.更好的垃圾回收机制，内纯分配动态
+		2.java没有类之外的全局变量，而是在某个公用类中定义静态变量完成全局变量功能。
+		3.没有指针
+		4.没有多重继承
+		5.没有头文件
+		6.类封装机制。
+
+	不同点:
+		1.数据声明
+		2.接口
+		3.包
+
+  关于我们一开始学的写计算器，我没有想到javaGUI编程如此简单就可以入门，然后自己开始写个计算器了。比起windows编程使用DirectX 或者OpenGL 等等简单太多了，真的挺激动人心的。
+  但是我在查看了java.awt javax.swing的api 发现了里面的内容相当繁杂相当多。突然就想起以前曾经听说过的java内容 包太多太杂，现在终于能理解了。
+
+	JAVA PLATFORM STANDARD EDITION 6 API http://www.javaweb.cc/JavaAPI1.6/
+
+
+
+
+
+
+
+
+
+ANT
+
+配置
+  详情参照 ANT教程详解.pdf
+
+使用教程
+  首先在shell下打开然后在当下目录需要有build.xml即可执行$: ant 命令
+
+  EX:
+<?xml version="1.0"?>
+	<project name="helloWorld">
+	<target name="sayHelloWorld">
+		<echo message="Hello,Amigo"/>
+	</target>
+	</project>
+
+
+
+
+
+
+
+
+
+  这是一个最简单的例子。下面对标签一个个讲解:
+xml:
+	<?xml version=”1.0”?> xml 声明 必须有
+	project:
+		项目
+		name:	project 名
+
+
+		target:
+			可以看做project下的一项项任务
+			name: target 名
+			depends: 依赖于其他target先完成。
+			Description: 描述
+
+		property:
+			相当于声明一个变量在project区域空间内使用
+			name: 变量名
+			可选（必选一）
+			location: 地址
+			value: 字符串/bool/值
+
+		path:
+			路径声明，使用各种引用包或者代码位置
+			id : id 名		（可在下面被target 使用classpath获取）
+			pathelement:
+				路径值
+				 location: 路径
+
+				
+  下面对target标签内容进行详解（依照与自己写的build.xml)
+	mkdir / junit /	delete / javac等命令行命令独立为一个标签
+
+	mkdir
+		dir:	创建文件位置及名字
+
+	delete:
+		fileset:
+			文件集
+			dir: 执行命令的路径
+
+	javac:
+		includeantruntime=”false” 默认/这里可以设置编译时间（不常用）
+		srcdir: 代码文件路径
+		destdir: 生成文件路径
+		classpathref: jar包引用路径
+
+	juint:
+		classpath: juint-4.*.jar路径+class路径
+			refid: 捕获path声明		
+		formatter:
+			type: brief / xml junit信息输出格式
+			usefile: 文件读写打开 非type=xml都为false
+			test:
+				测试函数
+				name: 必备 制定函数名
+			batchtest:
+				批测试函数
+				todir: 结果信息输出路径
+				fileset:	
+					dir: 指定代码路径
+				fileset:
+					include name:代码文件名及格式（支持正则表达）
+
+ANT API :  http://ant.apache.org/manual/index.html
+
+
+
+
+
+
+
+
+
+JUNIT
+配置:
+	下载最新版juint然后在编译过程中使用:
+$>:javac .:${path to junit}/junit-.jar Target.java
+$>:java .:${path to junit}/junit-.jar Target.java
+	即可。
+
+	或者加载到java包里。
+
+使用:
+	参照		Junit教程
+	与使用过的google Test 基本很相似，都是测试代码，用来run cases使用的.
+	主要记录下命令行使用Juint的方法:(Eclipse 没有试过)
+$>:javac .:${path to junit}/junit-.jar TargetTest.java
+$>:java .:${path to junit}/junit-.jar –ea org.junit.runner.JUnitCore TargetTest
+
+
+	使用junit，首先要写多一个juint test的java文件.
+	下面是junit pdf里面的模板:
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+public class HelloWorldTest {
+	public HelloWorld helloworld = new HelloWorld();
+	@Test
+	public void testHello() {
+	helloworld.hello();
+	assertEquals(―Hello World!‖, helloworld.getStr());
+	}
+}
+
+使用前需要实例化一个与测试对象相同的类作为测试类。
+@Test部分告诉junit这下面是Test部分。
+AssertEquals 传两个参数，不等就会报错。
+更多高级的内容在 https://github.com/junit-team/junit/wiki/Getting-started

@@ -1,0 +1,245 @@
+﻿The source code for the BoxBug class can be found in the  boxBug directory。.
+ 
+    1. What is the role of the instance variable sideLength?
+Answer: It is to set the length that BoxBugs can move and the bugs trap into a n*n size box.
+
+    2. What is the role of the instance variable steps?
+Answer: It acts as a counter that make Boxbugs not to walk outside the box designed.
+
+    3. Why is the turn method called twice when steps becomes equal to
+        sideLength?
+Answer: It is because Bugs have arrived the edge of box and it should walk spinningly in the box we defined.There we need turn twice to make sure the bug walk into the next correct direction.
+
+    4. Why can the move method be called in the BoxBug class when there is no
+        move method in the BoxBug code?
+Answer: Because BoxBug is inherited form Bug class which has complete move code previously.
+
+    5. After a BoxBug is constructed, will the size of its square pattern always be the same? Why or why not?
+Answer: Yes, it always be the same, because the sideLength is not changed through this process.
+
+    6. Can the path a BoxBug travels ever change? Why or why not?
+Answer: Yes, it can. If the BoxBug faces a rock or another bugs it will change its direction.
+
+    7. When will the value of steps be zero?
+Answer: From the bug starting to move or turnning.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXERCISE
+In the following exercises, write a new class that extends the Bug class. Override the act method to define the new behavior.
+
+1. Write a class CircleBug that is identical to BoxBug, except that in the act method the turn method is called once instead of twice. How is its behavior different from a BoxBug?
+Code:
+import info.gridworld.actor.Bug;
+public class CircleBug extends Bug
+{
+    private int steps;
+    private int sideLength;
+    public CircleBug(int length)
+    {
+        steps = 0;
+        sideLength = length;
+    }
+    public void act()
+    {
+        if (steps < sideLength && canMove())
+        {
+            move();
+            steps++;
+        }
+        else
+        {
+            turn();
+            steps = 0;
+        }
+    }
+}
+
+Answer: The Path it walk is an octagon not until it hit the wall.
+
+
+
+2. Write a class SpiralBug that drops flowers in a spiral pattern. Hint: Imitate BoxBug, but adjust the side length when the bug turns. You may want to change the world to an UnboundedGrid to see the spiral pattern more clearly.
+
+Code:
+import info.gridworld.actor.Bug;
+public class SpiralBug extends Bug
+{
+    private int steps;
+    private int sideLength;
+    public SpiralBug(int length)
+    {
+        steps = 0;
+        sideLength = length;
+    }
+    public void act()
+    {
+        if (steps < sideLength && canMove())
+        {
+            move();
+            steps++;
+        }
+        else
+        {
+            turn();
+            turn();
+            steps = 0;
+            sideLength++;
+        }
+    }
+}
+ 
+3. Write a class ZBug to implement bugs that move in a "Z" pattern, starting in the top left corner. After completing one "Z" pattern, a ZBug should stop moving. In any step, if a ZBug can't move and is still attempting to complete its "Z" pattern, the ZBug does not move and should not turn to start a new side. Supply the length of the "Z" as a parameter in the constructor. The following image shows a "Z" pattern of length 4. Hint: Notice that a ZBug needs to be facing east before beginning its "Z" pattern.
+Code:
+import info.gridworld.actor.Bug;
+import info.gridworld.grid.Location; 
+public class ZBug extends Bug
+{
+    private int steps;
+    private int sideLength;
+    private boolean moveFlag = false;
+    public ZBug(int length)
+    {
+        setDirection(Location.EAST);
+        steps = 0;
+        sideLength = length;
+    }
+    public void act()
+    {
+
+        if ((steps % sideLength != 0) && canMove() || steps == 0 || moveFlag)
+        {
+            move();
+            steps++;
+            moveFlag = false;
+        }
+        else
+        {
+
+            if (steps == sideLength){
+                turn();
+                turn();
+                turn();
+                moveFlag = true;
+            } else if (steps == sideLength*2){
+                turn();
+                turn();
+                turn();
+                turn();
+                turn();
+                moveFlag = true;
+            }
+        }
+    }
+}
+
+4. Write a class DancingBug that "dances" by making different turns before each move. The DancingBug constructor has an integer array as parameter. The integer entries in the array represent how many times the bug turns before it moves. For example, an array entry of 5 represents a turn of 225 degrees (recall one turn is 45 degrees). When a dancing bug acts, it should turn the number of times given by the current array entry, then act like a Bug. In the next move, it should use the next entry in the array. After carrying out the last turn in the array, it should start again with the initial array value so that the dancing bug continually repeats the same turning pattern.
+    The DancingBugRunner class should create an array and pass it as aparameter to the DancingBug constructor.
+Code: DancingBug.java
+import info.gridworld.actor.Bug;
+import info.gridworld.grid.Location; 
+public class DancingBug extends Bug
+{
+    private int [] array;
+    private int arrayIndex;
+    public DancingBug(int [] arrays)
+    {
+        array = arrays;
+        arrayIndex = 0;
+    }
+    public void act()
+    {
+        if (canMove())
+            {
+                move();
+            } else {
+                if (arrayIndex == array.length){
+                    arrayIndex = 0;
+                } else {
+                    for (int i = 0; i < array[arrayIndex]; i++) {
+                        turn();
+                    }
+                    arrayIndex ++;
+                }
+
+            }
+        }
+}
+
+Code: DancingBugRunner.java
+import info.gridworld.actor.ActorWorld;
+import info.gridworld.grid.Location;
+
+import java.awt.Color;
+
+public class DancingBugRunner
+{
+    public static void main(String[] args)
+    {   
+        int [] array = {1, 2, 3, 4, 5, 6};
+        ActorWorld world = new ActorWorld();
+        DancingBug alice = new DancingBug(array);
+        world.add(new Location(1, 1), alice);
+        world.show();
+    }
+}
+
+5. Study the code for the BoxBugRunner class. Summarize the steps you would use to add another BoxBug actor to the grid.
+ 
+BoxBugRunner.java
+
+import info.gridworld.actor.ActorWorld;
+import info.gridworld.grid.Location;
+import java.awt.Color;
+/**
+* This class runs a world that contains box bugs.
+* This class is not tested on the AP CS A and AB exams.
+*/
+public class BoxBugRunner
+{
+    public static void main(String[] args)
+    {
+        ActorWorld world = new ActorWorld();
+        BoxBug alice = new BoxBug(6);
+        alice.setColor(Color.ORANGE);
+        BoxBug bob = new BoxBug(3);
+        world.add(new Location(7, 8), alice);
+        world.add(new Location(5, 5), bob);
+        world.show();
+    }
+}
+
+Answer:
+	Firstly, you should new a BoxBug and give it a sideLength.
+	Secondly, setColor setDirection.
+	Lastly, add your bug into the world and set bug's location.

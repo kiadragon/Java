@@ -1,0 +1,127 @@
+﻿Set 3
+
+Assume the following statements when answering the following questions.
+
+Location loc1 = new Location(4, 3);
+Location loc2 = new Location(3, 4);
+
+1. How would you access the row value for loc1?
+Answer: Location.getRow();
+
+2. What is the value of b after the following statement is executed?
+boolean b = loc1.equals(loc2);
+Answer: False;
+
+3. What is the value of loc3 after the following statement is executed?
+Location loc3 = loc2.getAdjacentLocation(Location.SOUTH);
+Answer: locl3 = new Location(4, 4);
+
+4. What is the value of dir after the following statement is executed?
+int dir = loc1.getDirectionToward(new Location(6, 5));
+Answer: 135
+
+5. How does the getAdjacentLocation method know which adjacent location to return?
+Answer: It can be caculated by using the formula: arctan(loca2.y – loca1.y) / (loca2.x – loca1.x)
+
+Set 4
+
+1. How can you obtain a count of the objects in a grid? How can you obtain a count of the empty locations in a bounded grid?
+Answer: For a object name grid
+grid.getOccupiedLocation().size() equals a count of the objects in a grid.
+grid.getNumCols().grid.getNumRows() - getgetEmptyAdjacentLocation().size() means a count of the empty locations in a bounded grid.
+
+2. How can you check if location (10,10) is in a grid?
+Answer: Use boolean grid.isValid(new location(10,10))
+if return true, this location is in the grid, otherwises.
+
+3. Grid contains method declarations, but no code is supplied in the methods. Why? Where can you find the implementations of these methods?
+Answer: Grid is a Interface, which means you need to implement it in Java. It equal to the abstarct class in C++, method code insides the Interface should be finished before it instances.
+
+4. All methods that return multiple objects return them in an ArrayList. Do you think it would be a better design to return the objects in an array? Explain your answer.
+Answer: Unlike the array, the arraylist is a dynamic array which user needn't set size for it. And the ArrayList should be able to add more object to increase or decrease.
+
+
+
+
+Set 5
+
+1. Name three properties of every actor.
+Anwser: Color, direction and a location.
+
+2. When an actor is constructed, what is its direction and color?
+Answer: From API, Actor() constructs a blue actor that is facing north.
+
+3. Why do you think that the Actor class was created as a class instead of an interface?
+Answer: I think it is necessary to have some common methods like getColor(), getDirection(), etc.And all actors are the same.
+
+4. Can an actor put itself into a grid twice without first removing itself? Can an actor remove itself from a grid twice? Can an actor be placed into a grid, remove itself, and then put itself back? Try it out. What happens?
+Answer: No, if an actor is already in the grid, you can put it inside the grid again.
+Eorror:
+Exception in thread "main" java.lang.IllegalStateException: This actor is already contained in a grid.
+	at info.gridworld.actor.Actor.putSelfInGrid(Actor.java:118)
+	at info.gridworld.actor.ActorWorld.add(ActorWorld.java:79)
+	at BoxBugRunner.main(BoxBugRunner.java:37)
+
+No, you can not.
+Eorror:
+Exception in thread "main" java.lang.IllegalStateException: This actor is not contained in a grid.
+	at info.gridworld.actor.Actor.removeSelfFromGrid(Actor.java:136)
+	at BoxBugRunner.main(BoxBugRunner.java:39)
+
+Yes, you can remove actor and then put it back on the grid without any error.
+
+5. How can an actor turn 90 degrees to the right?
+Answer: You have two ways to do it:
+actor.setDirection(actor.getDirection() + 90);
+actor.setDirection(actor.getDirection() + Location.RIGHT);
+
+
+
+Set 6
+
+1. Which statement(s) in the canMove method ensures that a bug does not try to move out of its grid?
+Answer:
+        if (!gr.isValid(next))
+            return false;
+using Grid isVaild method.
+
+2. Which statement(s) in the canMove method determines that a bug will not walk into a rock?
+Answer:
+Actor neighbor = gr.get(next);
+return (neighbor == null) || (neighbor instanceof Flower);
+
+In source code, bugs would not walk on a rock because of what is showing above.
+
+3. Which methods of the Grid interface are invoked(调用) by the canMove method and why?
+Answer: gr.isValid(Location loc) & gr.get(Location loc)
+isValid() judges the bug whether facing the edge. 
+And get() gets what on that location and for next move judgmemt.
+
+4. Which method of the Location class is invoked by the canMove method and why?
+Answer:location.getAdjacentLocation(Direction dir)
+Get the bug next location for judgment.
+5. Which methods inherited(继承) from the Actor class are invoked in the canMove method?
+Answer: getLocation() getGrid() getDirection()
+
+6. What happens in the move method when the location immediately in front of the bug is out of the grid?
+Answer: removeSelfFromGrid();
+
+7. Is the variable loc needed in the move method, or could it be avoided by calling getLocation() multiple times?
+Answer: Not only it simply record the previous location, but it also uses for flower location.So it can not remove.
+
+8. Why do you think the flowers that are dropped by a bug have the same color as the bug?
+Answer: Because:
+Flower flower = new Flower(getColor());
+It gets color form the bug.
+
+9. When a bug removes itself from the grid, will it place a flower into its previous location?
+Answer: when you call removeSelfFromGrid(), the answer is no.
+But if it is bug calls move() and call removeSelfFromGrid(), the answer is yes.
+
+10. Which statement(s) in the move method places the flower into the grid at the bug's previous location?
+Answer: 
+flower.putSelfInGrid(gr, loc);
+
+11. If a bug needs to turn 180 degrees, how many times should it call the turn method?
+Answer: 
+Four times.
