@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+  <project default="run ImageIO" name="Part 5">
+     <description>Java Project</description>
+ 
+    <property name="srcDir" location="src"/>
+    <property name="buildDir" location="build"/>
+    <property name="distDir" location="dist"/>
+
+    <path id="classpath">
+      <pathelement location="lib/ImageReader.jar" />
+      <pathelement location="${buildDir}/class" />
+      <pathelement location="${buildDir}/runner" />
+    </path>
+
+    <target name="clean" description=" clean up all test/*">
+      <delete verbose="true">
+          <fileset dir="${buildDir}/class" includes="*.class"></fileset>
+      </delete>
+      <delete verbose="true">
+          <fileset dir="${buildDir}/runner" includes="*.class"></fileset>
+      </delete>
+    </target>
+
+    <target name="init" depends="clean" description="--Create build and dist FILES--">
+       <mkdir dir="${buildDir}/class"/>
+       <mkdir dir="${buildDir}/runner"/>
+
+    </target>
+
+    <target name="compile-class" depends="init">
+       <javac verbose="true" includeantruntime="false" srcdir="${srcDir}/class" destdir="${buildDir}/class" classpathref="classpath"/>
+    </target>
+    <target name="compile-runner" depends="compile-class">
+       <javac verbose="true" includeantruntime="false" srcdir="${srcDir}/runner" destdir="${buildDir}/runner" classpathref="classpath"/>
+    </target>
+
+
+    <target name="run ImageIO" depends="compile-runner">
+        <java  fork="yes" classpathref="classpath" classname="ProgramRunner"/>
+      </target>
+  </project>
